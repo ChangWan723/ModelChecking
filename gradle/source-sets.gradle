@@ -28,10 +28,14 @@ sourceSets {
         java.destinationDirectory = file("${buildDir}/peers")
         compileClasspath += sourceSets.main.output + sourceSets.annotations.output
     }
+    project {
+        java.srcDirs = ["src/project"]
+        java.destinationDirectory = file("${buildDir}/project")
+    }
     test {
         java.srcDirs = ["src/tests"]
         java.destinationDirectory = file("${buildDir}/tests")
-        compileClasspath += sourceSets.annotations.output + sourceSets.classes.output + sourceSets.peers.output
+        compileClasspath += sourceSets.annotations.output + sourceSets.classes.output + sourceSets.peers.output + sourceSets.project.output
         runtimeClasspath += compileClasspath
     }
 }
