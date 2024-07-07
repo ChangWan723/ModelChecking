@@ -2,12 +2,12 @@ package project.testcase;
 
 import src.repository.AccountRepo;
 import src.repository.DefaultAccountRepo;
-import src.service.DefaultTransaction;
-import src.service.TransactionManager;
+import src.service.DefaultTransfer;
+import src.service.TransferManager;
 
 public class TransExample {
     private static final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
-    private static TransactionManager transactionManager = new DefaultTransaction();
+    private static final TransferManager transferManager = new DefaultTransfer();
 
 
     public static void main(String[] args) {
@@ -19,13 +19,13 @@ public class TransExample {
     public static int[] transExample() {
         Thread user1 = new Thread(() -> {
              for (int i = 0; i < 10; i++) {
-                transactionManager.transfer(1, 2, 10);
+                transferManager.transfer(1, 2, 10);
              }
         });
 
         Thread user2 = new Thread(() -> {
              for (int i = 0; i < 10; i++) {
-                transactionManager.transfer(2, 1, 10);
+                transferManager.transfer(2, 1, 10);
              }
         });
 

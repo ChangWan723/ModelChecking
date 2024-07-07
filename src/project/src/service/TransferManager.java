@@ -1,5 +1,5 @@
 package src.service;
 
-public interface TransactionManager {
+public interface TransferManager {
     void transfer(int fromId, int toId, int amount);
 }

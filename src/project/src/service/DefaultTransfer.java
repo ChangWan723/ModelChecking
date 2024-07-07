@@ -6,7 +6,7 @@ import src.repository.DefaultAccountRepo;
 
 import java.util.Optional;
 
-public class DefaultTransaction implements TransactionManager {
+public class DefaultTransfer implements TransferManager {
     private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
 
     public void transfer(int fromId, int toId, int amount) {

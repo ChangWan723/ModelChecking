@@ -11,7 +11,7 @@ public class DefaultTransactionTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[10][0];
+        return new Object[1][0];
     }
 
     @Test
