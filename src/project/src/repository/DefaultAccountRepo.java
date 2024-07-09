@@ -29,7 +29,7 @@ public class DefaultAccountRepo implements AccountRepo {
     }
 
     @Override
-    public int queryBalance(int id) {
+    public double queryBalance(int id) {
         Optional<Account> account = accessAccount(id);
         return account.isPresent() ? account.get().getBalance() : 0;
     }

@@ -16,9 +16,9 @@ public class DefaultTransactionTest {
 
     @Test
     public void testTrans() {
-        int[] result = TransExample.transExample();
+        double[] result = TransExample.transExample();
 
-        Assert.assertEquals(1000, result[0]);
-        Assert.assertEquals(1000, result[1]);
+        Assert.assertEquals(1000, result[0], 0.000);
+        Assert.assertEquals(1000, result[1], 0.000);
     }
 }

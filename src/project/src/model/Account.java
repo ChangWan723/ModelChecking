@@ -2,22 +2,22 @@ package src.model;
 
 public class Account {
     private final int accountId;
-    private int balance;
+    private double balance;
 
     public Account(int accountId, int initialBalance) {
         this.accountId = accountId;
         this.balance = initialBalance;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void deposit(int amount) {
+    public void deposit(double amount) {
         balance += amount;
     }
 
-    public void withdraw(int amount) {
+    public void withdraw(double amount) {
         balance -= amount;
     }
 

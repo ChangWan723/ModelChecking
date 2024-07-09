@@ -9,7 +9,7 @@ import java.util.Optional;
 public class DefaultTransfer implements TransferManager {
     private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
 
-    public void transfer(int fromId, int toId, int amount) {
+    public void transfer(int fromId, int toId, double amount) {
         Optional<Account> from = accountRepo.accessAccount(fromId);
         Optional<Account> to = accountRepo.accessAccount(toId);
 

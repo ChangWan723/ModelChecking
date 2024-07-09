@@ -11,20 +11,20 @@ public class TransExample {
 
 
     public static void main(String[] args) {
-        int [] result = transExample();
+        double [] result = transExample();
         System.out.println("Final balance of account1: " + result[0]);
         System.out.println("Final balance of account2: " + result[1]);
     }
 
-    public static int[] transExample() {
+    public static double[] transExample() {
         Thread user1 = new Thread(() -> {
-             for (int i = 0; i < 10; i++) {
+             for (int i = 0; i < 100; i++) {
                 transferManager.transfer(1, 2, 10);
              }
         });
 
         Thread user2 = new Thread(() -> {
-             for (int i = 0; i < 10; i++) {
+             for (int i = 0; i < 100; i++) {
                 transferManager.transfer(2, 1, 10);
              }
         });
@@ -39,6 +39,6 @@ public class TransExample {
             e.printStackTrace();
         }
 
-        return new int[] {accountRepo.queryBalance(1), accountRepo.queryBalance(2)};
+        return new double[] {accountRepo.queryBalance(1), accountRepo.queryBalance(2)};
     }
 }
