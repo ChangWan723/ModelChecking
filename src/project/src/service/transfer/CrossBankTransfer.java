@@ -1,23 +1,24 @@
-package src.service;
+package src.service.transfer;
 
 import src.model.Account;
 import src.model.TransferRequest;
 import src.repository.AccountRepo;
+import src.repository.DefaultAccountRepo;
 
-import java.io.*;
-import java.net.*;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class CrossBackTransfer implements TransferManager {
-    private final AccountRepo accountRepository;
+public class CrossBankTransfer implements TransferManager {
+    private final AccountRepo accountRepository = DefaultAccountRepo.getInstance();
     private final BlockingQueue<TransferRequest> transferQueue = new LinkedBlockingQueue<>();
     private static final int MAX_RETRY_ATTEMPTS = 3;
 
-    public CrossBackTransfer(AccountRepo accountRepository) {
-        this.accountRepository = accountRepository;
-        new Thread(new TransferWorker()).start();
+    public CrossBankTransfer() {
+        new Thread(new TransferWorker(this)).start();
     }
 
     public void transfer(int fromAccountId, int toAccountId, double amount) {
@@ -30,11 +31,18 @@ public class CrossBackTransfer implements TransferManager {
     }
 
     private class TransferWorker implements Runnable {
+        private final CrossBankTransfer crossBankTransfer;
+
+        public TransferWorker(CrossBankTransfer crossBankTransfer) {
+            this.crossBankTransfer = crossBankTransfer;
+        }
+
         @Override
         public void run() {
+            // Use a while loop to continually fetch transfer messages from the message queue
             while (true) {
                 try {
-                    TransferRequest request = transferQueue.take();
+                    TransferRequest request = crossBankTransfer.transferQueue.take();
                     processTransfer(request, 0);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -47,15 +55,17 @@ public class CrossBackTransfer implements TransferManager {
             int toAccountId = request.getToAccountId();
             double amount = request.getAmount();
             try {
-                // Simulate network issue
-                if (Math.random() < 0.3) { // 30% chance of failure
-                    throw new Exception("Network issue, retrying...");
-                }
                 // Simulate socket communication
                 Socket socket = new Socket("localhost", 12345);
                 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 out.writeObject(request);
+
+                // Simulate network issue
+                /*if (Math.random() < 0.3) { // 30% chance of failure
+                    throw new Exception("Network issue, retrying...");
+                }*/
+
                 String response = (String) in.readObject();
                 if ("Transfer successful".equals(response)) {
                     System.out.println("Transfer successful: " + amount + " from " + fromAccountId + " to " + toAccountId);
@@ -75,7 +85,7 @@ public class CrossBackTransfer implements TransferManager {
 
         private void retryTransfer(TransferRequest request, int attempt) {
             try {
-                Thread.sleep(2000); // Wait before retrying
+                Thread.sleep(500); // Wait before retrying
                 processTransfer(request, attempt + 1);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -84,8 +94,8 @@ public class CrossBackTransfer implements TransferManager {
 
         private void rollbackTransfer(TransferRequest request) {
             try {
-                Optional<Account> fromAccount = accountRepository.accessAccount(request.getToAccountId());
-                Optional<Account> toAccount = accountRepository.accessAccount(request.getFromAccountId());
+                Optional<Account> fromAccount = crossBankTransfer.accountRepository.accessAccount(request.getToAccountId());
+                Optional<Account> toAccount = crossBankTransfer.accountRepository.accessAccount(request.getFromAccountId());
                 if (fromAccount.isPresent() && toAccount.isPresent()) {
                     fromAccount.get().withdraw(request.getAmount());
                     toAccount.get().deposit(request.getAmount());

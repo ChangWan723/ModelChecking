@@ -1,4 +1,4 @@
-package src.service;
+package src.service.transfer;
 
 import src.model.Account;
 import src.repository.AccountRepo;
@@ -6,7 +6,7 @@ import src.repository.DefaultAccountRepo;
 
 import java.util.Optional;
 
-public class DefaultTransfer implements TransferManager {
+public class SimpleTransfer implements TransferManager {
     private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
 
     public void transfer(int fromId, int toId, double amount) {
