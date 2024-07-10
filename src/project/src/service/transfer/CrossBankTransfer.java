@@ -4,16 +4,19 @@ import src.model.Account;
 import src.model.TransferRequest;
 import src.repository.AccountRepo;
 import src.repository.DefaultAccountRepo;
+import src.service.transfer.server.BankATransferServer;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CrossBankTransfer implements TransferManager {
-    private final AccountRepo accountRepository = DefaultAccountRepo.getInstance();
+    private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
     private final BlockingQueue<TransferRequest> transferQueue = new LinkedBlockingQueue<>();
     private static final int MAX_RETRY_ATTEMPTS = 3;
 
@@ -28,6 +31,19 @@ public class CrossBankTransfer implements TransferManager {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        // Start server
+        new Thread(() -> {
+            try {
+                ServerSocket serverSocket = new ServerSocket(12345);
+                while (true) {
+                    Socket clientSocket = serverSocket.accept();
+                    new Thread(new BankATransferServer(clientSocket, accountRepo)).start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private class TransferWorker implements Runnable {
@@ -94,8 +110,8 @@ public class CrossBankTransfer implements TransferManager {
 
         private void rollbackTransfer(TransferRequest request) {
             try {
-                Optional<Account> fromAccount = crossBankTransfer.accountRepository.accessAccount(request.getToAccountId());
-                Optional<Account> toAccount = crossBankTransfer.accountRepository.accessAccount(request.getFromAccountId());
+                Optional<Account> fromAccount = crossBankTransfer.accountRepo.accessAccount(request.getToAccountId());
+                Optional<Account> toAccount = crossBankTransfer.accountRepo.accessAccount(request.getFromAccountId());
                 if (fromAccount.isPresent() && toAccount.isPresent()) {
                     fromAccount.get().withdraw(request.getAmount());
                     toAccount.get().deposit(request.getAmount());

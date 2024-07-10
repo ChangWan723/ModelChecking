@@ -6,19 +6,24 @@ import src.repository.DefaultAccountRepo;
 
 import java.util.Optional;
 
-public class SimpleTransfer implements TransferManager {
+public class SameBankTransfer implements TransferManager {
     private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
 
     public void transfer(int fromId, int toId, double amount) {
         Optional<Account> from = accountRepo.accessAccount(fromId);
         Optional<Account> to = accountRepo.accessAccount(toId);
 
-        if (from.isEmpty() || to.isEmpty()) {
+        if (from.isEmpty() || to.isEmpty() || nonSameBank(from.get(), to.get())) {
+            System.out.println("Account does not exist, or account is not in the same bank");
             throw new IllegalArgumentException();
         }
 
         from.get().withdraw(amount);
         to.get().deposit(amount);
+    }
+
+    private boolean nonSameBank(Account from, Account to) {
+        return !from.getBackName().equals(to.getBackName());
     }
 }
 

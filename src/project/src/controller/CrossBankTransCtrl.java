@@ -3,11 +3,7 @@ package src.controller;
 import src.repository.AccountRepo;
 import src.repository.DefaultAccountRepo;
 import src.service.transfer.CrossBankTransfer;
-import src.service.transfer.server.BankATransferServer;
 import src.service.transfer.TransferManager;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class CrossBankTransCtrl {
     private final AccountRepo accountRepo;
@@ -23,34 +19,19 @@ public class CrossBankTransCtrl {
     }
 
     public void transferCrossBank(int fromAccountId, int toAccountId, double amount) {
-        // Start server
-        new Thread(() -> {
-            try {
-                ServerSocket serverSocket = new ServerSocket(12345);
-                while (true) {
-                    Socket clientSocket = serverSocket.accept();
-                    new Thread(new BankATransferServer(clientSocket, accountRepo)).start();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        crossBankTransfer.transfer(fromAccountId, toAccountId, amount);
 
-        // Test transfer
-        try {
-            crossBankTransfer.transfer(fromAccountId, toAccountId, amount);
-        } catch (Exception e1) {
-            System.out.println("Transfer initiation failed: " + e1.getMessage());
-        }
+        waitForAsyncProcess(1000);
+        System.out.println("fromAccount:" + accountRepo.accessAccount(fromAccountId).get().getBalance());
+        System.out.println("toAccount:" + accountRepo.accessAccount(toAccountId).get().getBalance());
+    }
 
+    private static void waitForAsyncProcess(int time) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(time);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        System.out.println("fromAccount:" + accountRepo.accessAccount(fromAccountId).get().getBalance());
-        System.out.println("toAccount:" + accountRepo.accessAccount(toAccountId).get().getBalance());
     }
 }
 

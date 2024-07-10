@@ -4,12 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import src.controller.SimpleTransCtrl;
+import src.controller.MultiThreadTransCtrl;
 import src.repository.AccountRepo;
 import src.repository.DefaultAccountRepo;
 
 @RunWith(Parameterized.class)
-public class SimpleTransferTest {
+public class SameBankTransferTest {
     private static final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
 
     @Parameterized.Parameters
@@ -18,10 +18,10 @@ public class SimpleTransferTest {
     }
 
     @Test
-    public void testTrans() {
-        new SimpleTransCtrl().transToEachOther(1, 2, 10);
+    public void testMultiThreadTrans() {
+        new MultiThreadTransCtrl().multiThreadTrans(1, 2, 100);
 
-        Assert.assertEquals(1000, accountRepo.queryBalance(1), 0.000);
-        Assert.assertEquals(1000, accountRepo.queryBalance(2), 0.000);
+        Assert.assertEquals(900, accountRepo.queryBalance(1), 0.000);
+        Assert.assertEquals(1100, accountRepo.queryBalance(2), 0.000);
     }
 }
