@@ -25,28 +25,19 @@ public class CrossBankTransfer implements TransferManager {
     }
 
     public void transfer(int fromAccountId, int toAccountId, double amount) {
+        new Thread(() -> {
+            new Thread(new BankATransferServer()).start();
+        }).start();
+
         TransferRequest request = new TransferRequest(fromAccountId, toAccountId, amount);
         try {
             transferQueue.put(request);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        // Start server
-        new Thread(() -> {
-            try {
-                ServerSocket serverSocket = new ServerSocket(12345);
-                while (true) {
-                    Socket clientSocket = serverSocket.accept();
-                    new Thread(new BankATransferServer(clientSocket, accountRepo)).start();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 
-    private class TransferWorker implements Runnable {
+    private static class TransferWorker implements Runnable {
         private final CrossBankTransfer crossBankTransfer;
 
         public TransferWorker(CrossBankTransfer crossBankTransfer) {
