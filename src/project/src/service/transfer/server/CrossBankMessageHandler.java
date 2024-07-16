@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Random;
 
 
-public class CrossBankTransHandler implements Runnable {
+public class CrossBankMessageHandler implements Runnable {
     private static final int MAX_RETRY_ATTEMPTS = 3;
 
     @Override
@@ -22,7 +22,7 @@ public class CrossBankTransHandler implements Runnable {
 
             withdrawFromInternalBank(message);
 
-            handleCrossBankTransfer(message, 1);
+            crossBankTransfer(message, 1);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -37,7 +37,7 @@ public class CrossBankTransHandler implements Runnable {
         account.get().withdraw(message.getAmount());
     }
 
-    private void handleCrossBankTransfer(TransferMessage message, int attempt) {
+    private void crossBankTransfer(TransferMessage message, int attempt) {
         try {
             simulateNetwork();
 
@@ -73,7 +73,7 @@ public class CrossBankTransHandler implements Runnable {
     private void retryTransfer(TransferMessage message, int attempt) {
         try {
             Thread.sleep(100); // Wait before retrying
-            handleCrossBankTransfer(message, attempt + 1);
+            crossBankTransfer(message, attempt + 1);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
