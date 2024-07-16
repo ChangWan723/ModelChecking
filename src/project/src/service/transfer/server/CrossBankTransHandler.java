@@ -3,102 +3,101 @@ package src.service.transfer.server;
 import src.model.Account;
 import src.model.TransferMessage;
 import src.model.TransferRequest;
-import src.repository.DefaultAccountRepo;
+import src.repository.InternalAccountRepo;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Optional;
+import java.util.Random;
 
 
-public class CrossBankTransferHandler implements Runnable {
+public class CrossBankTransHandler implements Runnable {
     private static final int MAX_RETRY_ATTEMPTS = 3;
 
     @Override
     public void run() {
-        // Use a while loop to continually fetch transfer messages from the message queue
         try {
-            TransferMessage message = MessageQueue.getTransferQueue().take();
+            TransferMessage message = MessageQueue.getRequestMessages().take();
 
-            Optional<Account> account = DefaultAccountRepo.getInstance().accessAccount(message.getFromAccountId());
-            if (account.isEmpty()) {
-                System.out.println("Account does not exist");
-                throw new IllegalArgumentException();
-            }
-            account.get().withdraw(message.getAmount());
+            withdrawFromInternalBank(message);
 
-            processTransfer(new TransferRequest(message.getToAccountId(), message.getAmount()), 0);
+            handleCrossBankTransfer(message, 1);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
-    private void processTransfer(TransferRequest request, int attempt) {
-        Optional<Account> account = DefaultAccountRepo.getInstance().accessAccount(request.getAccountId());
+    private static void withdrawFromInternalBank(TransferMessage message) {
+        Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
         if (account.isEmpty()) {
             System.out.println("Account does not exist");
             throw new IllegalArgumentException();
         }
+        account.get().withdraw(message.getAmount());
+    }
 
-        try (Socket socket = new Socket("localhost", 12345)) {
+    private void handleCrossBankTransfer(TransferMessage message, int attempt) {
+        try {
+            simulateNetwork();
+
             // Simulate network communication
+            Socket socket = new Socket("localhost", 12345);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            out.writeObject(request);
-
-            // Simulate network issue
-/*            if (true || Math.random() < 0.3) { // 30% chance of failure
-                throw new Exception("Network issue, retrying...");
-            }*/
-
+            out.writeObject(new TransferRequest(message.getFromAccountId(), message.getToAccountId(), message.getAmount()));
             String response = (String) in.readObject();
             if ("Transfer successful".equals(response)) {
-                System.out.println("Transfer successful");
+                MessageQueue.getResultMessages().put("transferId " + message.getTransferId() + ": Success");
             } else {
                 throw new Exception("Transfer failed on remote bank");
             }
+            socket.close();
         } catch (Exception e) {
-            System.out.println("Transfer attempt " + (attempt + 1) + " failed: " + e.getMessage());
+            System.out.println("Transfer attempt " + attempt + " failed: " + e.getMessage());
             if (attempt < MAX_RETRY_ATTEMPTS) {
-                retryTransfer(request, attempt);
+                retryTransfer(message, attempt);
             } else {
-                rollbackTransfer(request);
+                rollbackTransfer(message);
             }
         }
     }
 
-    private static Optional<Socket> createSocket(String bankName) throws IOException {
-        if (bankName.equals("BankA")) {
-            return Optional.of(new Socket("localhost", 12345));
-        } else if (bankName.equals("BankB")) {
-            return Optional.of(new Socket("localhost", 12346));
+    private static void simulateNetwork() throws Exception {
+        // Simulate network issue (50% chance of failure)
+        if (new Random().nextInt(10) < 5) {
+            throw new Exception("Network issue, retrying...");
         }
-
-        return Optional.empty();
     }
 
-    private void retryTransfer(TransferRequest request, int attempt) {
+    private void retryTransfer(TransferMessage message, int attempt) {
         try {
-            Thread.sleep(500); // Wait before retrying
-            processTransfer(request, attempt + 1);
+            Thread.sleep(100); // Wait before retrying
+            handleCrossBankTransfer(message, attempt + 1);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
     }
 
-    private void rollbackTransfer(TransferRequest request) {
+    private void rollbackTransfer(TransferMessage message) {
+        returnMoneyToInternalBank(message);
+
         try {
-            Optional<Account> account = DefaultAccountRepo.getInstance().accessAccount(request.getAccountId());
-            if (account.isPresent()) {
-                account.get().deposit(request.getAmount());
-                System.out.println("Rollback successful: " + request.getAmount() + " returned to " + request.getAccountId());
-            } else {
-                System.out.println("Rollback failed: Account not found");
-            }
-        } catch (Exception e) {
+            MessageQueue.getResultMessages().put("transferId " + message.getTransferId() + ": Fail");
+        } catch (InterruptedException e) {
             System.out.println("Rollback failed: " + e.getMessage());
         }
+
+    }
+
+    private static void returnMoneyToInternalBank(TransferMessage message) {
+        Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
+        if (account.isEmpty()) {
+            System.out.println("Rollback failed: Account not found");
+            return;
+        }
+        account.get().deposit(message.getAmount());
+        System.out.println("Rollback successful: " + message.getAmount() + " returned to " + message.getFromAccountId());
     }
 }
 

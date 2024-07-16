@@ -2,12 +2,12 @@ package src.service.transfer;
 
 import src.model.Account;
 import src.repository.AccountRepo;
-import src.repository.DefaultAccountRepo;
+import src.repository.InternalAccountRepo;
 
 import java.util.Optional;
 
 public class SameBankTransfer implements TransferManager {
-    private final AccountRepo accountRepo = DefaultAccountRepo.getInstance();
+    private final AccountRepo accountRepo = InternalAccountRepo.getInstance();
 
     public void transfer(int fromId, int toId, double amount) {
         Optional<Account> from = accountRepo.accessAccount(fromId);

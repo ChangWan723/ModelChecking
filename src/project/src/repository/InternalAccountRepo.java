@@ -6,21 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DefaultAccountRepo implements AccountRepo {
+public class InternalAccountRepo implements AccountRepo {
     private final List<Account> accountList = new ArrayList<>();
 
-    private DefaultAccountRepo() {
+    private InternalAccountRepo() {
         // Mock some data
         accountList.add(new Account(1, 1000, "BankA"));
         accountList.add(new Account(2, 1000, "BankA"));
-        accountList.add(new Account(3, 1000, "BankB"));
     }
 
     private static final class InstanceHolder {
-        private static final DefaultAccountRepo instance = new DefaultAccountRepo();
+        private static final InternalAccountRepo instance = new InternalAccountRepo();
     }
 
-    public static DefaultAccountRepo getInstance() {
+    public static InternalAccountRepo getInstance() {
         return InstanceHolder.instance;
     }
 

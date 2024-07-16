@@ -3,7 +3,7 @@ package src.service.transfer.server;
 import src.model.Account;
 import src.model.TransferRequest;
 import src.repository.AccountRepo;
-import src.repository.DefaultAccountRepo;
+import src.repository.ExternalAccountRepo;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,12 +12,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Optional;
 
-public class ExternalTransferServer implements Runnable {
-    private final AccountRepo accountRepository = DefaultAccountRepo.getInstance();
+public class ExternalBankServer implements Runnable {
+    private final AccountRepo accountRepository = ExternalAccountRepo.getInstance();
+    private static final int TIMEOUT = 3000;
 
     @Override
     public void run() {
-        try (Socket socket = new ServerSocket(12345).accept()) {
+        try (ServerSocket serverSocket = new ServerSocket(12345)) {
+            serverSocket.setSoTimeout(TIMEOUT);
+            Socket socket = serverSocket.accept();
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             TransferRequest request = (TransferRequest) in.readObject();
@@ -25,12 +28,13 @@ public class ExternalTransferServer implements Runnable {
             out.writeObject("Transfer successful");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+
         }
     }
 
     private void processTransfer(TransferRequest request) {
         try {
-            Optional<Account> account = accountRepository.accessAccount(request.getAccountId());
+            Optional<Account> account = accountRepository.accessAccount(request.getToAccountId());
             if (account.isEmpty()) {
                 throw new Exception("Account not found");
             }
