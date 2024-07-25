@@ -35,7 +35,7 @@ public class ExternalBankServer implements Runnable {
     private void processTransfer(TransferRequest request) {
         try {
             Optional<Account> account = accountRepository.accessAccount(request.getToAccountId());
-            if (account.isEmpty()) {
+            if (!account.isPresent()) {
                 throw new Exception("Account not found");
             }
             account.get().deposit(request.getAmount());

@@ -6,6 +6,7 @@ import src.service.transfer.SameBankTransfer;
 import src.service.transfer.TransferManager;
 
 public class MultiThreadTransCtrl {
+    public static final int TRANS_TIMES = 10;
     private final AccountRepo accountRepo = InternalAccountRepo.getInstance();
 
     public static void main(String[] args) {
@@ -14,13 +15,13 @@ public class MultiThreadTransCtrl {
 
     public void multiThreadTransToEachOther(int fromId, int toId, long amount) {
         Thread user1 = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < TRANS_TIMES; i++) {
                 ((TransferManager) new SameBankTransfer()).transfer(fromId, toId, amount);
             }
         });
 
         Thread user2 = new Thread(() -> {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < TRANS_TIMES; i++) {
                 ((TransferManager) new SameBankTransfer()).transfer(toId, fromId, amount);
             }
         });

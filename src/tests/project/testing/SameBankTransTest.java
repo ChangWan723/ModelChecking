@@ -1,4 +1,4 @@
-package project.convention;
+package project.testing;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
 @RunWith(Parameterized.class)
-public class SameBankTransferTest {
+public class SameBankTransTest {
     private static final AccountRepo accountRepo = InternalAccountRepo.getInstance();
 
     @Parameterized.Parameters

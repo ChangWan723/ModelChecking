@@ -13,7 +13,7 @@ public class SameBankTransfer implements TransferManager {
         Optional<Account> from = accountRepo.accessAccount(fromId);
         Optional<Account> to = accountRepo.accessAccount(toId);
 
-        if (from.isEmpty() || to.isEmpty() || nonSameBank(from.get(), to.get())) {
+        if (!from.isPresent() || !to.isPresent() || nonSameBank(from.get(), to.get())) {
             System.out.println("Account does not exist, or account is not in the same bank");
             throw new IllegalArgumentException();
         }

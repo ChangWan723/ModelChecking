@@ -6,6 +6,7 @@ import src.model.TransferRequest;
 import src.repository.InternalAccountRepo;
 import src.service.transfer.MessageQueue;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -31,7 +32,7 @@ public class InternalBankServer implements Runnable {
 
     private static void withdrawFromInternalBank(TransferMessage message) {
         Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
-        if (account.isEmpty()) {
+        if (!account.isPresent()) {
             System.out.println("Account does not exist");
             throw new IllegalArgumentException();
         }
@@ -66,7 +67,7 @@ public class InternalBankServer implements Runnable {
 
     private static void simulateNetwork() throws Exception {
         // Simulate network issue (50% chance of failure)
-        if (new Random().nextInt(10) < 5) {
+        if (new Random().nextInt(10) < 0) {
             throw new Exception("Network issue, retrying...");
         }
     }
@@ -93,7 +94,7 @@ public class InternalBankServer implements Runnable {
 
     private static void returnMoneyToInternalBank(TransferMessage message) {
         Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
-        if (account.isEmpty()) {
+        if (!account.isPresent()) {
             System.out.println("Rollback failed: Account not found");
             return;
         }

@@ -8,7 +8,7 @@ import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
 
-public class SameBankTransferTest extends TestJPF {
+public class SameBankTransTest extends TestJPF {
     private static final AccountRepo accountRepo = InternalAccountRepo.getInstance();
 
     static final TypeRef PROPERTY = new TypeRef("gov.nasa.jpf.listener.PreciseRaceDetector");
