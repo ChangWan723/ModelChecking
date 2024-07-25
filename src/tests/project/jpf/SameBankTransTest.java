@@ -15,8 +15,7 @@ public class SameBankTransTest extends TestJPF {
     static final String LISTENER = "+listener=gov.nasa.jpf.listener.PreciseRaceDetector";
 
     private static final String[] JPF_ARGS = new String[]{
-            "+listener=gov.nasa.jpf.listener.PreciseRaceDetector",
-            "+classpath=build/project"
+            "+listener=gov.nasa.jpf.listener.PreciseRaceDetector"
     };
 
     @Test

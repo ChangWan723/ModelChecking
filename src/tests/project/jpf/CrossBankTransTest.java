@@ -13,8 +13,7 @@ public class CrossBankTransTest extends TestJPF {
 
 
     private static final String[] JPF_ARGS = new String[]{
-            "+listener=gov.nasa.jpf.listener.PreciseRaceDetector",
-            "+classpath=build/project"
+            "+listener=gov.nasa.jpf.listener.PreciseRaceDetector"
     };
 
     @Test
