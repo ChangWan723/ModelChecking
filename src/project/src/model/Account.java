@@ -1,25 +1,25 @@
 package src.model;
 
 public class Account {
+    private long balance;
     private final int accountId;
-    private double balance;
     private final String backName;
 
-    public Account(int accountId, double initialBalance, String backName) {
+    public Account(int accountId, long initialBalance, String backName) {
         this.accountId = accountId;
         this.balance = initialBalance;
         this.backName = backName;
     }
 
-    public double getBalance() {
+    public long getBalance() {
         return balance;
     }
 
-    public void deposit(double amount) {
+    public void deposit(long amount) {
         balance += amount;
     }
 
-    public void withdraw(double amount) {
+    public void withdraw(long amount) {
         balance -= amount;
     }
 

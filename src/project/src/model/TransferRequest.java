@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class TransferRequest implements Serializable {
     private final int fromAccountId;
     private final int toAccountId;
-    private final double amount;
+    private final long amount;
 
-    public TransferRequest(int fromAccountId, int toAccountId, double amount) {
+    public TransferRequest(int fromAccountId, int toAccountId, long amount) {
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
         this.amount = amount;
@@ -21,7 +21,7 @@ public class TransferRequest implements Serializable {
         return toAccountId;
     }
 
-    public double getAmount() {
+    public long getAmount() {
         return amount;
     }
 }

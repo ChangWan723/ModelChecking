@@ -12,7 +12,7 @@ public class MultiThreadTransCtrl {
         new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 10);
     }
 
-    public void multiThreadTransToEachOther(int fromId, int toId, double amount) {
+    public void multiThreadTransToEachOther(int fromId, int toId, long amount) {
         Thread user1 = new Thread(() -> {
             for (int i = 0; i < 100; i++) {
                 ((TransferManager) new SameBankTransfer()).transfer(fromId, toId, amount);

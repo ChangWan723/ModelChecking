@@ -7,10 +7,10 @@ import src.service.transfer.TransferManager;
 
 public class CrossBankTransCtrl {
     public static void main(String[] args) {
-        new CrossBankTransCtrl().transferCrossBank(2, 3, 100.0);
+        new CrossBankTransCtrl().transferCrossBank(2, 3, 100);
     }
 
-    public void transferCrossBank(int fromAccountId, int toAccountId, double amount) {
+    public void transferCrossBank(int fromAccountId, int toAccountId, long amount) {
         ((TransferManager) new CrossBankTransfer()).transfer(fromAccountId, toAccountId, amount);
 
         waitForAsyncProcess(1000);

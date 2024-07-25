@@ -10,7 +10,7 @@ public class CrossBankTransfer implements TransferManager {
         new Thread(new ExternalBankServer()).start();
     }
 
-    public void transfer(int fromAccountId, int toAccountId, double amount) {
+    public void transfer(int fromAccountId, int toAccountId, long amount) {
         try {
             MessageQueue.getRequestMessages().put(new TransferMessage(1, fromAccountId, toAccountId, amount));
             String result = MessageQueue.getResultMessages().take();

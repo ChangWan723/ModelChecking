@@ -29,7 +29,7 @@ public class ExternalAccountRepo implements AccountRepo {
     }
 
     @Override
-    public double queryBalance(int id) {
+    public long queryBalance(int id) {
         Optional<Account> account = accessAccount(id);
         return account.isPresent() ? account.get().getBalance() : 0;
     }

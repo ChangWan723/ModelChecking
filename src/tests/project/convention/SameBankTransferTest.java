@@ -21,7 +21,7 @@ public class SameBankTransferTest {
     public void testMultiThreadTrans() {
         new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 100);
 
-        Assert.assertEquals(1000, accountRepo.queryBalance(1), 0.000);
-        Assert.assertEquals(1000, accountRepo.queryBalance(2), 0.000);
+        Assert.assertEquals(1000, accountRepo.queryBalance(1));
+        Assert.assertEquals(1000, accountRepo.queryBalance(2));
     }
 }

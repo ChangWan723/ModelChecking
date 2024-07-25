@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface AccountRepo {
     Optional<Account> accessAccount(int id);
 
-    double queryBalance(int id);
+    long queryBalance(int id);
 }
