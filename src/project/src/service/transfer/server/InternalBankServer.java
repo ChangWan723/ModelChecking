@@ -4,6 +4,7 @@ import src.model.Account;
 import src.model.TransferMessage;
 import src.model.TransferRequest;
 import src.repository.InternalAccountRepo;
+import src.service.transfer.MessageQueue;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.Random;
 
 
-public class CrossBankMessageHandler implements Runnable {
+public class InternalBankServer implements Runnable {
     private static final int MAX_RETRY_ATTEMPTS = 3;
 
     @Override

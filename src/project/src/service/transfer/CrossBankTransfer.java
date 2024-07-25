@@ -2,12 +2,11 @@ package src.service.transfer;
 
 import src.model.TransferMessage;
 import src.service.transfer.server.ExternalBankServer;
-import src.service.transfer.server.MessageQueue;
-import src.service.transfer.server.CrossBankMessageHandler;
+import src.service.transfer.server.InternalBankServer;
 
 public class CrossBankTransfer implements TransferManager {
     public CrossBankTransfer() {
-        new Thread(new CrossBankMessageHandler()).start();
+        new Thread(new InternalBankServer()).start();
         new Thread(new ExternalBankServer()).start();
     }
 

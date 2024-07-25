@@ -1,4 +1,4 @@
-package src.service.transfer.server;
+package src.service.transfer;
 
 import src.model.TransferMessage;
 
