@@ -1,12 +1,11 @@
 package src.service.transfer.server;
 
-import src.model.Account;
-import src.model.TransferMessage;
-import src.model.TransferRequest;
+import src.repository.model.Account;
+import src.repository.model.TransferMessage;
+import src.repository.model.TransferRequest;
 import src.repository.InternalAccountRepo;
 import src.service.transfer.MessageQueue;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -67,7 +66,7 @@ public class InternalBankServer implements Runnable {
 
     private static void simulateNetwork() throws Exception {
         // Simulate network issue (50% chance of failure)
-        if (new Random().nextInt(10) < 0) {
+        if (new Random().nextInt(10) < 5) {
             throw new Exception("Network issue, retrying...");
         }
     }

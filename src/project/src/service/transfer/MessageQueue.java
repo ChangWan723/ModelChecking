@@ -1,6 +1,6 @@
 package src.service.transfer;
 
-import src.model.TransferMessage;
+import src.repository.model.TransferMessage;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

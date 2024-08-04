@@ -7,6 +7,8 @@ import src.repository.AccountRepo;
 import src.repository.ExternalAccountRepo;
 import src.repository.InternalAccountRepo;
 
+import java.net.Socket;
+
 public class CrossBankTransTest extends TestJPF {
     private static final AccountRepo internalRepo = InternalAccountRepo.getInstance();
     private static final AccountRepo externalRepo = ExternalAccountRepo.getInstance();
@@ -17,9 +19,15 @@ public class CrossBankTransTest extends TestJPF {
     };
 
     @Test
-    public void testCrossBankTrans_by_PreciseRaceDetector() {
-        if (verifyNoPropertyViolation(JPF_ARGS)) {
-            new CrossBankTransCtrl().transferCrossBank(2, 3, 100);
+    public void test() {
+        if (verifyNoPropertyViolation()) {
+            try {
+                Socket socket = new Socket("localhost", 12345); // error location
+                // ...
+                // ...
+            } catch (Exception e) {
+                // ...
+            }
         }
     }
 

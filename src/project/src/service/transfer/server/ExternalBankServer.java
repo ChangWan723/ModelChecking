@@ -1,7 +1,7 @@
 package src.service.transfer.server;
 
-import src.model.Account;
-import src.model.TransferRequest;
+import src.repository.model.Account;
+import src.repository.model.TransferRequest;
 import src.repository.AccountRepo;
 import src.repository.ExternalAccountRepo;
 

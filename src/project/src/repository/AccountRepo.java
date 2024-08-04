@@ -1,6 +1,6 @@
 package src.repository;
 
-import src.model.Account;
+import src.repository.model.Account;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package src.model;
+package src.repository.model;
 
 public class Account {
     private long balance;
