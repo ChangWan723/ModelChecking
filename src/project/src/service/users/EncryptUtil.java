@@ -18,7 +18,7 @@ public class EncryptUtil {
             }
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error occurred during password encryption", e);
+            return "error";
         }
     }
 }

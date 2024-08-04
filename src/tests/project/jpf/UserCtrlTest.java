@@ -11,9 +11,16 @@ public class UserCtrlTest extends TestJPF {
     };
 
     @Test
-    public void testConcurrentRegisterUser_by_PreciseRaceDetector() {
+    public void testRegisterUser_in_tread_pool_by_PreciseRaceDetector() {
         if (verifyNoPropertyViolation(JPF_ARGS)) {
-            UserScenario.concurrentUserCreation(20);
+            UserScenario.concurrentUserCreationByThreadPool(2);
+        }
+    }
+
+    @Test
+    public void testRegisterUser_in_two_tread_by_PreciseRaceDetector() {
+        if (verifyNoPropertyViolation(JPF_ARGS)) {
+            UserScenario.createUsersWithTwoThreads(2);
         }
     }
 }
