@@ -1,6 +1,6 @@
 package src.service.transfer;
 
-import src.repository.model.Account;
+import src.model.Account;
 import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 

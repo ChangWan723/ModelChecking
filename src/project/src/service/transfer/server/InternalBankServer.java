@@ -1,8 +1,8 @@
 package src.service.transfer.server;
 
-import src.repository.model.Account;
-import src.repository.model.TransferMessage;
-import src.repository.model.TransferRequest;
+import src.model.Account;
+import src.model.TransferMessage;
+import src.model.TransferRequest;
 import src.repository.InternalAccountRepo;
 import src.service.transfer.MessageQueue;
 

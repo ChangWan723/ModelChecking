@@ -4,9 +4,13 @@ sourceSets {
         java.destinationDirectory = file("${buildDir}/annotations")
     }
     main {
-        java.srcDirs = ["src/main"]
+        java.srcDirs = ["src/main", "src/project"]
         java.destinationDirectory = file("${buildDir}/main")
         compileClasspath += sourceSets.annotations.output
+    }
+    project {
+        java.srcDirs = ["src/project"]
+        java.destinationDirectory = file("${buildDir}/project")
     }
     examples {
         java.srcDirs = ["src/examples"]
@@ -27,10 +31,6 @@ sourceSets {
         java.srcDirs = ["src/peers"]
         java.destinationDirectory = file("${buildDir}/peers")
         compileClasspath += sourceSets.main.output + sourceSets.annotations.output
-    }
-    project {
-        java.srcDirs = ["src/project"]
-        java.destinationDirectory = file("${buildDir}/project")
     }
     test {
         java.srcDirs = ["src/tests"]

@@ -1,20 +1,16 @@
-package src.repository.model;
+package src.model;
 
-public class TransferMessage {
-    private final int transferId;
+import java.io.Serializable;
+
+public class TransferRequest implements Serializable {
     private final int fromAccountId;
     private final int toAccountId;
     private final long amount;
 
-    public TransferMessage(int transferId, int fromAccountId, int toAccountId, long amount) {
-        this.transferId = transferId;
+    public TransferRequest(int fromAccountId, int toAccountId, long amount) {
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
         this.amount = amount;
-    }
-
-    public int getTransferId() {
-        return transferId;
     }
 
     public int getFromAccountId() {

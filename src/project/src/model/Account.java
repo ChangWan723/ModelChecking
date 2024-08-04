@@ -1,8 +1,8 @@
-package src.repository.model;
+package src.model;
 
 public class Account {
-    private long balance;
     private final int accountId;
+    private long balance;
     private final String backName;
 
     public Account(int accountId, long initialBalance, String backName) {

@@ -20,14 +20,8 @@ public class CrossBankTransTest extends TestJPF {
 
     @Test
     public void test() {
-        if (verifyNoPropertyViolation()) {
-            try {
-                Socket socket = new Socket("localhost", 12345); // error location
-                // ...
-                // ...
-            } catch (Exception e) {
-                // ...
-            }
+        if (verifyNoPropertyViolation(JPF_ARGS)) {
+            new CrossBankTransCtrl().transferCrossBank(2, 3, 100);
         }
     }
 

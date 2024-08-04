@@ -1,6 +1,6 @@
 package src.repository;
 
-import src.repository.model.Account;
+import src.model.Account;
 
 import java.util.ArrayList;
 import java.util.List;

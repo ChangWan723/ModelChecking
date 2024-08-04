@@ -1,7 +1,7 @@
 package src.service.transfer.server;
 
-import src.repository.model.Account;
-import src.repository.model.TransferRequest;
+import src.model.Account;
+import src.model.TransferRequest;
 import src.repository.AccountRepo;
 import src.repository.ExternalAccountRepo;
 
@@ -35,7 +35,7 @@ public class ExternalBankServer implements Runnable {
     private void processTransfer(TransferRequest request) {
         try {
             Optional<Account> account = accountRepository.accessAccount(request.getToAccountId());
-            if (!account.isPresent()) {
+            if (account.isEmpty()) {
                 throw new Exception("Account not found");
             }
             account.get().deposit(request.getAmount());

@@ -1,6 +1,6 @@
 package src.service.transfer;
 
-import src.repository.model.TransferMessage;
+import src.model.TransferMessage;
 import src.service.transfer.server.ExternalBankServer;
 import src.service.transfer.server.InternalBankServer;
 
