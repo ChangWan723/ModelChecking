@@ -2,7 +2,7 @@ package project.jpf;
 
 import gov.nasa.jpf.util.test.TestJPF;
 import org.junit.Test;
-import src.controller.MultiThreadTransCtrl;
+import project.scenario.TransferScenario;
 import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
@@ -17,13 +17,13 @@ public class SameBankTransTest extends TestJPF {
     @Test
     public void testMultiThreadTrans_by_PreciseRaceDetector() {
         if (verifyNoPropertyViolation(JPF_ARGS)) {
-            new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 10);
+            TransferScenario.multiThreadTransToEachOther(1, 2, 10);
         }
     }
 
     @Test
     public void testMultiThreadTrans_by_assertion() {
-        new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 10);
+        TransferScenario.multiThreadTransToEachOther(1, 2, 10);
 
         assertTrue(accountRepo.queryBalance(1) == 1000);
         assertTrue(accountRepo.queryBalance(2) == 1000);

@@ -1,34 +1,33 @@
-package src.controller;
+package project.scenario;
 
+import src.controller.SameBankTransCtrl;
 import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
-import src.service.transfer.SameBankTransfer;
-import src.service.transfer.TransferManager;
 
-public class MultiThreadTransCtrl {
-    public static final int TRANS_TIMES = 10;
-    private final AccountRepo accountRepo = InternalAccountRepo.getInstance();
+public class TransferScenario {
+    public static final int TRANS_TIMES = 1;
+    private static final AccountRepo accountRepo = InternalAccountRepo.getInstance();
+    private static final SameBankTransCtrl transCtrl = new SameBankTransCtrl();
 
     public static void main(String[] args) {
-        new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 10);
+        multiThreadTransToEachOther(1, 2, 10);
     }
 
-    public void multiThreadTransToEachOther(int fromId, int toId, long amount) {
+    public static void multiThreadTransToEachOther(int fromId, int toId, long amount) {
         Thread user1 = new Thread(() -> {
             for (int i = 0; i < TRANS_TIMES; i++) {
-                ((TransferManager) new SameBankTransfer()).transfer(fromId, toId, amount);
+                transCtrl.transferMoney(fromId, toId, amount);
             }
         });
 
         Thread user2 = new Thread(() -> {
             for (int i = 0; i < TRANS_TIMES; i++) {
-                ((TransferManager) new SameBankTransfer()).transfer(toId, fromId, amount);
+                transCtrl.transferMoney(toId, fromId, amount);
             }
         });
 
         user1.start();
         user2.start();
-
         try {
             user1.join();
             user2.join();

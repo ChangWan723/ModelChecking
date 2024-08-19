@@ -2,7 +2,6 @@ package src.repository;
 
 import src.model.User;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static src.service.users.EncryptUtil.encryptPassword;

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import src.controller.MultiThreadTransCtrl;
+import project.scenario.TransferScenario;
 import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
@@ -14,12 +14,12 @@ public class SameBankTransTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[10][0];
+        return new Object[500][0];
     }
 
     @Test
     public void testMultiThreadTrans() {
-        new MultiThreadTransCtrl().multiThreadTransToEachOther(1, 2, 100);
+        TransferScenario.multiThreadTransToEachOther(1, 2, 100);
 
         Assert.assertEquals(1000, accountRepo.queryBalance(1));
         Assert.assertEquals(1000, accountRepo.queryBalance(2));
