@@ -19,9 +19,18 @@ public class UserCtrlTest {
     }
     @Test
     public void testConcurrentRegisterUser() {
-        int creationCount = 20;
+        int creationCount = 200;
 
         UserScenario.concurrentUserCreationByThreadPool(creationCount);
+
+        Assert.assertEquals(originalCount + creationCount, userRepo.getUserCount());
+    }
+
+    @Test
+    public void testConcurrentRegisterUserByThread() {
+        int creationCount = 200;
+
+        UserScenario.createUsersWithTwoThreads(creationCount);
 
         Assert.assertEquals(originalCount + creationCount, userRepo.getUserCount());
     }

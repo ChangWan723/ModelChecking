@@ -16,20 +16,33 @@ public class UserScenario {
         concurrentUserCreationByThreadPool(4);
     }
 
-    public static void concurrentUserCreationByThreadPool(int times) {
+    public static void concurrentUserCreationByThreadPool(int userCount) {
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
-        CountDownLatch latch = new CountDownLatch(times);
+        CountDownLatch latch = new CountDownLatch(2);
 
-        for (int i = 0; i < times; i++) {
-            executorService.execute(() -> {
-                try {
-                    User newUser = new User("user" + UUID.randomUUID(), "password");
+
+        executorService.execute(() -> {
+            try {
+                for (int i = 0; i < userCount / 2; i++) {
+                    User newUser = new User("user" + i, "password");
                     userCtrl.registerUser(newUser);
-                } finally {
-                    latch.countDown();
                 }
-            });
-        }
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        executorService.execute(() -> {
+            try {
+                for (int i = userCount / 2; i < userCount; i++) {
+                    User newUser = new User("user" + i, "password");
+                    userCtrl.registerUser(newUser);
+                }
+            } finally {
+                latch.countDown();
+            }
+        });
+
 
         try {
             latch.await();
@@ -39,17 +52,17 @@ public class UserScenario {
         executorService.shutdown();
     }
 
-    public static void createUsersWithTwoThreads(int times) {
+    public static void createUsersWithTwoThreads(int userCount) {
 
         Thread user1 = new Thread(() -> {
-            for (int i = 0; i < times / 2; i++) {
+            for (int i = 0; i < userCount / 2; i++) {
                 User newUser = new User("user" + i, "password" + i);
                 userCtrl.registerUser(newUser);
             }
         });
 
         Thread user2 = new Thread(() -> {
-            for (int i = times / 2; i < times; i++) {
+            for (int i = userCount / 2; i < userCount; i++) {
                 User newUser = new User("user" + i, "password" + i);
                 userCtrl.registerUser(newUser);
             }
