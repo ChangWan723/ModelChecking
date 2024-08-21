@@ -2,9 +2,8 @@ package src.service.transfer.server;
 
 import src.model.Account;
 import src.model.TransferMessage;
-import src.model.TransferRequest;
 import src.repository.InternalAccountRepo;
-import src.service.transfer.MessageQueue;
+import src.service.transfer.InternalMessageQueue;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,7 +18,7 @@ public class InternalBankServer implements Runnable {
     @Override
     public void run() {
         try {
-            TransferMessage message = MessageQueue.getRequestMessages().take();
+            TransferMessage message = InternalMessageQueue.getRequestMessages().take();
 
             withdrawFromInternalBank(message);
 
@@ -31,7 +30,7 @@ public class InternalBankServer implements Runnable {
 
     private static void withdrawFromInternalBank(TransferMessage message) {
         Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
-        if (!account.isPresent()) {
+        if (account.isEmpty()) {
             System.out.println("Account does not exist");
             throw new IllegalArgumentException();
         }
@@ -40,16 +39,16 @@ public class InternalBankServer implements Runnable {
 
     private void crossBankTransfer(TransferMessage message, int attempt) {
         try {
-            simulateNetwork();
+            // simulateNetwork();
 
             // Simulate network communication
             Socket socket = new Socket("localhost", 12345);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            out.writeObject(new TransferRequest(message.getFromAccountId(), message.getToAccountId(), message.getAmount()));
+            out.writeObject(message);
             String response = (String) in.readObject();
-            if ("Transfer successful".equals(response)) {
-                MessageQueue.getResultMessages().put("transferId " + message.getTransferId() + ": Success");
+            if ("MQ successful".equals(response)) {
+                InternalMessageQueue.getResultMessages().put("MQ transferId " + message.getTransferId() + ": Success");
             } else {
                 throw new Exception("Transfer failed on remote bank");
             }
@@ -84,7 +83,7 @@ public class InternalBankServer implements Runnable {
         returnMoneyToInternalBank(message);
 
         try {
-            MessageQueue.getResultMessages().put("transferId " + message.getTransferId() + ": Fail");
+            InternalMessageQueue.getResultMessages().put("transferId " + message.getTransferId() + ": Fail");
         } catch (InterruptedException e) {
             System.out.println("Rollback failed: " + e.getMessage());
         }

@@ -5,7 +5,7 @@ import src.model.TransferMessage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class MessageQueue {
+public class InternalMessageQueue {
     private static final BlockingQueue<TransferMessage> REQUEST_MESSAGES = new LinkedBlockingQueue<>();
     private static final BlockingQueue<String> RESULT_MESSAGES = new LinkedBlockingQueue<>();
 

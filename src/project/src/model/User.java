@@ -7,7 +7,7 @@ public class User {
     private Long userId;
     private String userName;
     private String password;
-    private List<String> accounts; // 假设账户是简单的字符串列表
+    private List<String> accounts;
 
     public User(String userName, String password) {
         this.userName = userName;
