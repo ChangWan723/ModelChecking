@@ -25,7 +25,6 @@ public class UserRepo {
         private static final UserRepo INSTANCE = new UserRepo();
     }
 
-    // 提供全局访问点
     public static UserRepo getInstance() {
         return UserRepoHolder.INSTANCE;
     }

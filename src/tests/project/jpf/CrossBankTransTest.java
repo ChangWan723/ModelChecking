@@ -2,6 +2,7 @@ package project.jpf;
 
 import gov.nasa.jpf.util.test.TestJPF;
 import org.junit.Test;
+import project.scenario.CrossBankTransScenario;
 import src.controller.CrossBankTransCtrl;
 import src.repository.AccountRepo;
 import src.repository.ExternalAccountRepo;
@@ -21,7 +22,7 @@ public class CrossBankTransTest extends TestJPF {
     @Test
     public void test() {
         if (verifyNoPropertyViolation(JPF_ARGS)) {
-            new CrossBankTransCtrl().transferCrossBank(2, 3, 100);
+            CrossBankTransScenario.crossBankTrans(2, 3, 100);
         }
     }
 

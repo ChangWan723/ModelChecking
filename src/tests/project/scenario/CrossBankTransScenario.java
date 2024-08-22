@@ -12,10 +12,9 @@ public class CrossBankTransScenario {
     public static void crossBankTrans(int fromId, int toId, long amount) {
         new CrossBankTransCtrl().transferCrossBank(2, 3, 100);
 
-        waitForAsyncProcess(1000);
+        // waitForAsyncProcess(1000);
         System.out.println("fromAccount:" + InternalAccountRepo.getInstance().accessAccount(fromId).get().getBalance());
         System.out.println("toAccount:" + ExternalAccountRepo.getInstance().accessAccount(toId).get().getBalance());
-        System.exit(0);
     }
 
     private static void waitForAsyncProcess(int time) {

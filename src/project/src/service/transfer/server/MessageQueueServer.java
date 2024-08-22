@@ -34,7 +34,6 @@ public class MessageQueueServer implements Runnable {
         }
     }
 
-    // 消费者连接监听器
     class ConsumerListener implements Runnable {
         @Override
         public void run() {

@@ -9,11 +9,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Optional;
-import java.util.Random;
 
 
 public class InternalBankServer implements Runnable {
     private static final int MAX_RETRY_ATTEMPTS = 3;
+    public static final int RETRY_TIME_MS = 2000;
+
+    private static boolean retry = true;
 
     @Override
     public void run() {
@@ -39,7 +41,7 @@ public class InternalBankServer implements Runnable {
 
     private void crossBankTransfer(TransferMessage message, int attempt) {
         try {
-            // simulateNetwork();
+            simulateNetwork();
 
             // Simulate network communication
             Socket socket = new Socket("localhost", 12345);
@@ -65,14 +67,18 @@ public class InternalBankServer implements Runnable {
 
     private static void simulateNetwork() throws Exception {
         // Simulate network issue (50% chance of failure)
-        if (new Random().nextInt(10) < 5) {
+        /*if (new Random().nextInt(10) < 5) {
+            throw new Exception("Network issue, retrying...");
+        }*/
+        if (retry) {
+            retry = false;
             throw new Exception("Network issue, retrying...");
         }
     }
 
     private void retryTransfer(TransferMessage message, int attempt) {
         try {
-            Thread.sleep(100); // Wait before retrying
+            Thread.sleep(RETRY_TIME_MS); // Wait before retrying
             crossBankTransfer(message, attempt + 1);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
