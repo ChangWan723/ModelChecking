@@ -4,26 +4,21 @@ import src.controller.SameBankTransCtrl;
 import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
-public class TransferScenario {
-    public static final int TRANS_TIMES = 10;
+public class LockerTransferScenario {
     private static final AccountRepo accountRepo = InternalAccountRepo.getInstance();
     private static final SameBankTransCtrl transCtrl = new SameBankTransCtrl();
 
     public static void main(String[] args) {
-        multiThreadTransToEachOther(1, 2, 10);
+        transferToEachOtherWithLocker(1, 2, 10);
     }
 
-    public static void multiThreadTransToEachOther(int fromId, int toId, long amount) {
+    public static void transferToEachOtherWithLocker(int fromId, int toId, long amount) {
         Thread user1 = new Thread(() -> {
-            for (int i = 0; i < TRANS_TIMES; i++) {
-                transCtrl.transferMoney(fromId, toId, amount);
-            }
+            transCtrl.transferMoneyWithLocker(fromId, toId, amount);
         });
 
         Thread user2 = new Thread(() -> {
-            for (int i = 0; i < TRANS_TIMES; i++) {
-                transCtrl.transferMoney(toId, fromId, amount);
-            }
+            transCtrl.transferMoneyWithLocker(toId, fromId, amount);
         });
 
         user1.start();
@@ -34,8 +29,5 @@ public class TransferScenario {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Final balance of fromId: " + accountRepo.queryBalance(fromId));
-        System.out.println("Final balance of toId: " + accountRepo.queryBalance(toId));
     }
 }

@@ -12,4 +12,8 @@ public class SameBankTransCtrl {
     public void transferMoney(int fromId, int toId, long amount) {
         sameBankTransfer.transfer(fromId, toId, amount);
     }
+
+    public void transferMoneyWithLocker(int fromId, int toId, long amount) {
+        sameBankTransfer.transferWithLocker(fromId, toId, amount);
+    }
 }

@@ -49,8 +49,8 @@ public class NumericValueCheckerTest extends TestJPF {
 
 
   static class C2 {
-    void doSomething(int d){
-      int x = d;
+    void doSomething(double d){
+      double x = d;
     }
   }
 
@@ -59,10 +59,10 @@ public class NumericValueCheckerTest extends TestJPF {
     if (verifyPropertyViolation(new TypeRef("gov.nasa.jpf.listener.NumericValueChecker"),
             "+listener=.listener.NumericValueChecker",
             "+range.vars=x",
-            "+range.x.var=*$C2.doSomething(int):x",
-            "+range.x.min=42")){
+            "+range.x.var=*$C2.doSomething(double):x",
+            "+range.x.max=0.5")){
       C2 c2= new C2();
-      c2.doSomething(-42);
+      c2.doSomething(0.25);
     }
   }
 }

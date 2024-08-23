@@ -22,6 +22,25 @@ public class SameBankTransfer implements TransferManager {
         to.get().deposit(amount);
     }
 
+    public void transferWithLocker(int fromId, int toId, long amount) {
+        Optional<Account> from = accountRepo.accessAccount(fromId);
+        Optional<Account> to = accountRepo.accessAccount(toId);
+
+        if (from.isEmpty() || to.isEmpty() || nonSameBank(from.get(), to.get())) {
+            System.out.println("Account does not exist, or account is not in the same bank");
+            throw new IllegalArgumentException();
+        }
+        Account fromAccount = from.get();
+        Account toAccount = to.get();
+
+        synchronized (fromAccount) {
+            synchronized (toAccount) {
+                fromAccount.withdraw(amount);
+                toAccount.deposit(amount);
+            }
+        }
+    }
+
     private boolean nonSameBank(Account from, Account to) {
         return !from.getBackName().equals(to.getBackName());
     }
