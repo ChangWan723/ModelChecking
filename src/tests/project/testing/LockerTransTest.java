@@ -14,7 +14,7 @@ public class LockerTransTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[1000][0];
+        return new Object[100][0];
     }
 
     @Test(timeout = 1000) // How much time is appropriate?

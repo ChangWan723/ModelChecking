@@ -4,20 +4,21 @@ import gov.nasa.jpf.util.test.TestJPF;
 
 
 public class NumericTest extends TestJPF {
-    static class C2 {
-        void doSomething() {
-            double x = 0.5;
+    static class InterestCalculator {
+        void calculateCompoundInterest() {
+            double monthlyRate = 0.3;
         }
     }
 
     @org.junit.Test
     public void testVars() {
         if (verifyNoPropertyViolation("+listener=.listener.NumericValueChecker",
-                "+range.vars=x",
-                "+range.x.var=*$C2.doSomething():x",
-                "+range.x.max=0.9")) {
-            C2 c2 = new C2();
-            c2.doSomething();
+                "+range.vars=monthlyRate",
+                "+range.monthlyRate.var=*$InterestCalculator.calculateCompoundInterest():monthlyRate",
+                "+range.monthlyRate.min=0",
+                "+range.monthlyRate.max=0.5")) {
+            InterestCalculator interestCalculator = new InterestCalculator();
+            interestCalculator.calculateCompoundInterest();
         }
     }
 }

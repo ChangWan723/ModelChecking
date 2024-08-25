@@ -5,8 +5,8 @@ import src.repository.AccountRepo;
 import src.repository.InternalAccountRepo;
 
 public class LockerTransferScenario {
-    private static final AccountRepo accountRepo = InternalAccountRepo.getInstance();
     private static final SameBankTransCtrl transCtrl = new SameBankTransCtrl();
+    private static final int TRANS_TIMES = 1;
 
     public static void main(String[] args) {
         transferToEachOtherWithLocker(1, 2, 10);
@@ -14,11 +14,15 @@ public class LockerTransferScenario {
 
     public static void transferToEachOtherWithLocker(int fromId, int toId, long amount) {
         Thread user1 = new Thread(() -> {
-            transCtrl.transferMoneyWithLocker(fromId, toId, amount);
+            for (int i = 0; i < TRANS_TIMES; i++) {
+                transCtrl.transferMoneyWithLocker(fromId, toId, amount);
+            }
         });
 
         Thread user2 = new Thread(() -> {
-            transCtrl.transferMoneyWithLocker(toId, fromId, amount);
+            for (int i = 0; i < TRANS_TIMES; i++) {
+                transCtrl.transferMoneyWithLocker(toId, fromId, amount);
+            }
         });
 
         user1.start();

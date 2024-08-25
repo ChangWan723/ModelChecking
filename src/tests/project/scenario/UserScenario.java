@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UserScenario {
     private static final UserCtrl userCtrl = new UserCtrl();
-    public static final int THREAD_COUNT = 2;
+    private static final int THREAD_COUNT = 2;
 
     public static void main(String[] args) {
         concurrentUserCreationByThreadPool(4);
