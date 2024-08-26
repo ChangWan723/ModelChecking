@@ -16,7 +16,7 @@ public class CrossBankTransfer implements TransferManager {
         try {
             InternalMessageQueue.getRequestMessages().put(new TransferMessage(1, "Bank B", fromAccountId, toAccountId, amount));
             String result = InternalMessageQueue.getResultMessages().take();
-            System.out.println(result);
+            System.out.println("### result:" + result);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

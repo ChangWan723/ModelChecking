@@ -98,7 +98,7 @@ public class InternalBankServer implements Runnable {
 
     private static void returnMoneyToInternalBank(TransferMessage message) {
         Optional<Account> account = InternalAccountRepo.getInstance().accessAccount(message.getFromAccountId());
-        if (!account.isPresent()) {
+        if (account.isEmpty()) {
             System.out.println("Rollback failed: Account not found");
             return;
         }

@@ -43,7 +43,7 @@ public class ExternalBankServer implements Runnable {
             }
             account.get().deposit(request.getAmount());
         } catch (Exception e) {
-            System.out.println("Transfer failed: " + e.getMessage());
+            System.out.println("Transfer failed");
         }
     }
 }

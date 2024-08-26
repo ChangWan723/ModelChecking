@@ -8,8 +8,6 @@ import src.repository.AccountRepo;
 import src.repository.ExternalAccountRepo;
 import src.repository.InternalAccountRepo;
 
-import java.net.Socket;
-
 public class CrossBankTransTest extends TestJPF {
     private static final AccountRepo internalRepo = InternalAccountRepo.getInstance();
     private static final AccountRepo externalRepo = ExternalAccountRepo.getInstance();

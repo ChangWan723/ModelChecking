@@ -13,7 +13,7 @@ public class UserScenario {
     private static final int THREAD_COUNT = 2;
 
     public static void main(String[] args) {
-        concurrentUserCreationByThreadPool(4);
+        concurrentUserCreationByThreadPool(2);
     }
 
     public static void concurrentUserCreationByThreadPool(int userCount) {
