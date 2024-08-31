@@ -12,6 +12,8 @@ public class NumericTest extends TestJPF {
 
     @org.junit.Test
     public void testVars() {
+        // A bug was found when using NumericValueChecker.
+        // Here's a simple example of the bug
         if (verifyNoPropertyViolation("+listener=.listener.NumericValueChecker",
                 "+range.vars=monthlyRate",
                 "+range.monthlyRate.var=*$InterestCalculator.calculateCompoundInterest():monthlyRate",

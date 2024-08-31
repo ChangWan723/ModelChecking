@@ -14,7 +14,7 @@ public class SameBankTransTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[10][0];
+        return new Object[50][0];
     }
 
     @Test
