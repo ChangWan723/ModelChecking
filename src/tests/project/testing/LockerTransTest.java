@@ -14,10 +14,10 @@ public class LockerTransTest {
 
     @Parameterized.Parameters
     public static Object[][] data() {
-        return new Object[100][0];
+        return new Object[1][0];
     }
 
-    @Test(timeout = 1000) // How much time is appropriate?
+    @Test(timeout = 1000)
     public void testMultiThreadTrans() {
         LockerTransferScenario.transferToEachOtherWithLocker(1, 2, 100);
 

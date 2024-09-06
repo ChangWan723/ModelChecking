@@ -34,10 +34,19 @@ public class SameBankTransfer implements TransferManager {
         Account toAccount = to.get();
 
         synchronized (fromAccount) {
+            doSomething(50);
             synchronized (toAccount) {
                 fromAccount.withdraw(amount);
                 toAccount.deposit(amount);
             }
+        }
+    }
+
+    private void doSomething(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
